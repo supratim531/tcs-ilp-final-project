@@ -1,0 +1,35 @@
+.card {
+  border: none;
+  border-radius: 10px;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.form-control, .form-select {
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.btn {
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 500;
+}
+
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+
+.fa-check-circle {
+  color: #28a745;
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 80px;
+}

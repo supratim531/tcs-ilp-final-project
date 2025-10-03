@@ -1,0 +1,46 @@
+.card {
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.badge {
+  font-size: 0.75rem;
+}
+
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.sticky-top {
+  top: 1rem;
+}
+
+.btn-primary {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.text-primary {
+  color: #007bff !important;
+}
+
+.alert-info {
+  background-color: #e7f3ff;
+  border-color: #b3d7ff;
+  color: #0c5460;
+}
+
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+
+input[readonly] {
+  background-color: #f8f9fa;
+}

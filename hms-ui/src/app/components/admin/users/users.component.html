@@ -1,0 +1,328 @@
+<div class="users-container">
+    <h2>User Management</h2>
+
+    <!-- Success/Error Messages -->
+    <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        {{ successMessage }}
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        {{ errorMessage }}
+    </div>
+
+    <!-- Add User Button -->
+    <div class="mb-3">
+        <button class="btn btn-primary" (click)="showAddForm()">
+            <i class="fas fa-plus me-2"></i>
+            Add New User
+        </button>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Full Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Address</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of paginatedUsers">
+                    <td>{{user.userId}}</td>
+                    <td>{{user.fullName}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.phone}}</td>
+                    <td>
+                        <span [class]="'badge bg-' + (user.role === 'ADMIN' ? 'danger' : 'primary')">
+                            {{user.role}}
+                        </span>
+                    </td>
+                    <td>{{user.address || 'N/A'}}</td>
+                    <td class="no-wrap">
+                        <button (click)="editUser(user)" class="btn btn-sm btn-outline-primary me-2">Edit</button>
+                        <button (click)="showDeleteConfirmation(user)" class="btn btn-sm btn-outline-danger">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination">
+        <button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+        <span>Page {{currentPage}} of {{totalPages}}</span>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+        <select [(ngModel)]="itemsPerPage" name="itemsPerPage" (change)="updatePagination()">
+            <option value="5">5 per page</option>
+            <option value="10">10 per page</option>
+            <option value="20">20 per page</option>
+        </select>
+    </div>
+
+    <!-- Add User Modal -->
+    <div class="modal fade" [class.show]="showAddModal" [style.display]="showAddModal ? 'block' : 'none'"
+        tabindex="-1" role="dialog" *ngIf="showAddModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content animate-slide-down">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Add New User
+                    </h5>
+                    <button type="button" class="btn-close" (click)="closeAddModal()"></button>
+                </div>
+
+                <form [formGroup]="addForm" (ngSubmit)="submitAdd()">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addFullName" class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="addFullName" formControlName="fullName">
+                                <div *ngIf="addForm.get('fullName')?.invalid && addForm.get('fullName')?.touched"
+                                    class="text-danger small mt-1">
+                                    Full name is required (min 2 characters)
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="addUsername" class="form-label">Username *</label>
+                                <input type="text" class="form-control" id="addUsername" formControlName="username">
+                                <div *ngIf="addForm.get('username')?.invalid && addForm.get('username')?.touched"
+                                    class="text-danger small mt-1">
+                                    Username is required (min 3 characters)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addEmail" class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="addEmail" formControlName="email">
+                                <div *ngIf="addForm.get('email')?.invalid && addForm.get('email')?.touched"
+                                    class="text-danger small mt-1">
+                                    Valid email is required
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="addPhone" class="form-label">Phone *</label>
+                                <input type="tel" class="form-control" id="addPhone" formControlName="phone">
+                                <div *ngIf="addForm.get('phone')?.invalid && addForm.get('phone')?.touched"
+                                    class="text-danger small mt-1">
+                                    Valid phone with country code required
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addPassword" class="form-label">Password *</label>
+                                <input type="password" class="form-control" id="addPassword" formControlName="password">
+                                <div *ngIf="addForm.get('password')?.invalid && addForm.get('password')?.touched"
+                                    class="text-danger small mt-1">
+                                    Password is required (min 6 characters)
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="addRole" class="form-label">Role *</label>
+                                <select class="form-select" id="addRole" formControlName="role">
+                                    <option value="">Select Role</option>
+                                    <option *ngFor="let role of userRoles" [value]="role">{{ role }}</option>
+                                </select>
+                                <div *ngIf="addForm.get('role')?.invalid && addForm.get('role')?.touched"
+                                    class="text-danger small mt-1">
+                                    Role is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="addAddress" class="form-label">Address</label>
+                            <textarea class="form-control" id="addAddress" rows="3" formControlName="address"
+                                placeholder="User address..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeAddModal()"
+                            [disabled]="isSubmitting">Cancel</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="addForm.invalid || isSubmitting">
+                            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+                            {{ isSubmitting ? 'Creating...' : 'Create User' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal fade" [class.show]="showEditModal" [style.display]="showEditModal ? 'block' : 'none'"
+        tabindex="-1" role="dialog" *ngIf="showEditModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content animate-slide-down">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-edit me-2"></i>
+                        Edit User: {{ selectedUser?.fullName }}
+                    </h5>
+                    <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+                </div>
+
+                <form [formGroup]="editForm" (ngSubmit)="submitEdit()">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editFullName" class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="editFullName" formControlName="fullName">
+                                <div *ngIf="editForm.get('fullName')?.invalid && editForm.get('fullName')?.touched"
+                                    class="text-danger small mt-1">
+                                    Full name is required (min 2 characters)
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="editUsername" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="editUsername" formControlName="username" readonly>
+                                <div class="form-text">Username cannot be changed</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editEmail" class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="editEmail" formControlName="email">
+                                <div *ngIf="editForm.get('email')?.invalid && editForm.get('email')?.touched"
+                                    class="text-danger small mt-1">
+                                    Valid email is required
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="editPhone" class="form-label">Phone *</label>
+                                <input type="tel" class="form-control" id="editPhone" formControlName="phone">
+                                <div *ngIf="editForm.get('phone')?.invalid && editForm.get('phone')?.touched"
+                                    class="text-danger small mt-1">
+                                    Valid phone with country code required
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editRole" class="form-label">Role</label>
+                                <input type="text" class="form-control" id="editRole" formControlName="role" readonly>
+                                <div class="form-text">Role cannot be changed</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editAddress" class="form-label">Address</label>
+                            <textarea class="form-control" id="editAddress" rows="3" formControlName="address"
+                                placeholder="User address..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeEditModal()"
+                            [disabled]="isSubmitting">Cancel</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || isSubmitting">
+                            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+                            {{ isSubmitting ? 'Updating...' : 'Update User' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Bookings Warning Modal -->
+    <div class="modal fade" [class.show]="showUpcomingBookingsModal" [style.display]="showUpcomingBookingsModal ? 'block' : 'none'"
+        tabindex="-1" role="dialog" *ngIf="showUpcomingBookingsModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content animate-slide-down">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
+                        User Has Upcoming Bookings
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <strong>Warning:</strong> User <strong>{{ userToDelete?.fullName }}</strong> has {{ upcomingBookings.length }} upcoming booking(s).
+                    </div>
+                    
+                    <h6>Upcoming Bookings:</h6>
+                    <div class="list-group">
+                        <div class="list-group-item" *ngFor="let booking of upcomingBookings">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-1">Booking #{{ booking.bookingId }}</h6>
+                                    <p class="mb-1">{{ booking.roomType }} - Room {{ booking.roomNumber }}</p>
+                                    <small>{{ booking.checkInDate | date:'dd/MM/yyyy' }} - {{ booking.checkOutDate | date:'dd/MM/yyyy' }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-success">{{ booking.bookingStatus }}</span>
+                                    <div class="mt-1">
+                                        <strong class="text-primary">₹{{ booking.totalAmount }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="mt-3 text-muted">Deleting this user will affect these bookings. Are you sure you want to proceed?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeUpcomingBookingsModal()" [disabled]="isSubmitting">Cancel</button>
+                    <button type="button" class="btn btn-danger" (click)="proceedWithDelete()" [disabled]="isSubmitting">
+                        <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+                        {{ isSubmitting ? 'Deleting...' : 'Delete User' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" [class.show]="showDeleteModal" [style.display]="showDeleteModal ? 'block' : 'none'"
+        tabindex="-1" role="dialog" *ngIf="showDeleteModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content animate-slide-down">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-triangle me-2 text-danger"></i>
+                        Confirm Delete
+                    </h5>
+                    <button type="button" class="btn-close" (click)="closeDeleteModal()"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete user <strong>{{ userToDelete?.fullName }}</strong>?</p>
+                    <p class="text-muted small">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeDeleteModal()" [disabled]="isSubmitting">Cancel</button>
+                    <button type="button" class="btn btn-danger" (click)="confirmDelete()" [disabled]="isSubmitting">
+                        <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+                        {{ isSubmitting ? 'Deleting...' : 'Delete' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Backdrop -->
+    <div class="modal-backdrop fade" [class.show]="showEditModal || showAddModal || showDeleteModal || showUpcomingBookingsModal" 
+        *ngIf="showEditModal || showAddModal || showDeleteModal || showUpcomingBookingsModal" 
+        (click)="showEditModal ? closeEditModal() : showAddModal ? closeAddModal() : showDeleteModal ? closeDeleteModal() : closeUpcomingBookingsModal()">
+    </div>
+</div>

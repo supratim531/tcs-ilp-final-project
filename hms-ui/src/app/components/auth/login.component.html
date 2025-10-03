@@ -1,0 +1,77 @@
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light">
+  <div class="row w-100">
+    <div class="col-md-6 col-lg-4 mx-auto">
+      <div class="card shadow">
+        <div class="card-body p-5">
+          <div class="text-center mb-4">
+            <h2 class="card-title text-primary">Hotel Booking System</h2>
+            <p class="text-muted">Sign in to your account</p>
+          </div>
+
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" formControlName="username"
+                [class.is-invalid]="getFieldError('username')" placeholder="Enter your username">
+              <div class="invalid-feedback">
+                {{ getFieldError('username') }}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" formControlName="password"
+                [class.is-invalid]="getFieldError('password')" placeholder="Enter your password">
+              <div class="invalid-feedback">
+                {{ getFieldError('password') }}
+              </div>
+            </div>
+
+            <!-- <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+
+              <div class="one-line-div" *ngIf="!showPassword">
+                <input type="password" class="form-control" id="password" formControlName="password"
+                  [class.is-invalid]="getFieldError('password')" placeholder="Enter your password">
+                <i class="fa-solid fa-eye-slash" (click)="toggleShowPassword()"></i>
+              </div>
+              <div class="invalid-feedback">
+                {{ getFieldError('password') }}
+              </div>
+
+              <div class="one-line-div" *ngIf="showPassword">
+                <input type="text" class="form-control" id="text" formControlName="password"
+                [class.is-invalid]="getFieldError('password')" placeholder="Enter your password">
+                <i class="fa-solid fa-eye" (click)="toggleShowPassword()"></i>
+              </div>
+              <div class="invalid-feedback">
+                {{ getFieldError('password') }}
+              </div>
+            </div> -->
+
+            <div class="alert alert-danger" *ngIf="errorMessage">
+              {{ errorMessage }}
+            </div>
+
+            <div class="d-grid gap-2 mb-3">
+              <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid || loading">
+                <span *ngIf="loading" class="loading-spinner me-2"></span>
+                {{ loading ? 'Signing in...' : 'Sign In' }}
+              </button>
+            </div>
+
+            <div class="text-center">
+              <p class="mb-2">
+                Don't have an account?
+                <a routerLink="/auth/register" class="text-primary">Register Now</a>
+              </p>
+              <p class="mb-0">
+                <a routerLink="/auth/change-password" class="text-secondary">Change Password</a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

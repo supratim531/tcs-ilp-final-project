@@ -1,0 +1,315 @@
+<div class="rooms-container">
+    <h2>Room Management</h2>
+
+    <!-- <div class="controls">
+        <button (click)="showAddForm = !showAddForm">Add Room</button>
+        <button (click)="showBulkAdd = !showBulkAdd">Bulk Add / Import Rooms</button>
+        <input [(ngModel)]="searchTerm" name="search" placeholder="Search by room number or type..."
+            (input)="filterRooms()">
+
+        <select [(ngModel)]="filterType" name="type" (change)="filterRooms()">
+            <option value="">All Types</option>
+            <option value="Supreme">Supreme</option>
+            <option value="Deluxe">Deluxe</option>
+            <option value="Suite">Suite</option>
+        </select>
+
+        <select [(ngModel)]="statusFilter" name="status" (change)="filterRooms()">
+            <option value="">All Status</option>
+            <option value="Available">Available</option>
+            <option value="Occupied">Occupied</option>
+            <option value="Under Maintenance">Under Maintenance</option>
+        </select>
+
+        <input [(ngModel)]="minPrice" name="minPrice" type="number" placeholder="Min Price" (input)="filterRooms()">
+        <input [(ngModel)]="maxPrice" name="maxPrice" type="number" placeholder="Max Price" (input)="filterRooms()">
+
+        <select [(ngModel)]="occupancyFilter" name="occupancy" (change)="filterRooms()">
+            <option value="">All Occupancy</option>
+            <option value="2">Up to 2</option>
+            <option value="4">Up to 4</option>
+            <option value="6">Up to 6</option>
+        </select>
+
+        <input [(ngModel)]="selectedDate" name="date" type="date" (change)="filterRooms()"
+            placeholder="Available on date">
+    </div> -->
+
+    <!-- Add Room Form -->
+    <!-- <div *ngIf="showAddForm" class="add-form">
+        <h3>Add New Room</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Room Number *</label>
+                <input [(ngModel)]="newRoom.number" name="roomNumber" placeholder="Auto-generated" readonly>
+                <div *ngIf="errors.number" class="error">{{errors.number}}</div>
+            </div>
+
+            <div class="form-group">
+                <label>Room Type *</label>
+                <select [(ngModel)]="newRoom.type" name="roomType" (change)="validateField('type')">
+                    <option value="">Select Room Type</option>
+                    <option value="Supreme">Supreme</option>
+                    <option value="Deluxe">Deluxe</option>
+                    <option value="Suite">Suite</option>
+                </select>
+                <div *ngIf="errors.type" class="error">{{errors.type}}</div>
+            </div>
+
+            <div class="form-group">
+                <label>Price per Night *</label>
+                <input [(ngModel)]="newRoom.price" name="price" type="number" min="1" placeholder="Enter price"
+                    (blur)="validateField('price')">
+                <div *ngIf="errors.price" class="error">{{errors.price}}</div>
+            </div>
+
+            <div class="form-group">
+                <label>Max Occupancy *</label>
+                <input [(ngModel)]="newRoom.maxOccupancy" name="maxOccupancy" type="number" min="1"
+                    placeholder="Enter max occupancy" (blur)="validateField('maxOccupancy')">
+                <div *ngIf="errors.maxOccupancy" class="error">{{errors.maxOccupancy}}</div>
+            </div>
+
+            <div class="form-group">
+                <label>Availability *</label>
+                <select [(ngModel)]="newRoom.available" name="available" (change)="validateField('available')">
+                    <option value="">Select Availability</option>
+                    <option [value]="true">Available</option>
+                    <option [value]="false">Not Available</option>
+                </select>
+                <div *ngIf="errors.available" class="error">{{errors.available}}</div>
+            </div>
+
+            <div class="form-group full-width">
+                <label>Amenities (Optional)</label>
+                <div class="amenities-grid">
+                    <label *ngFor="let amenity of availableAmenities" class="checkbox-label">
+                        <input type="checkbox" [checked]="selectedAmenities.includes(amenity)"
+                            (change)="toggleNewAmenity(amenity, $event)">
+                        {{amenity}}
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label>Description (Optional)</label>
+                <textarea [(ngModel)]="newRoom.description" name="description" maxlength="500"
+                    placeholder="Brief description of the room (max 500 characters)"
+                    (input)="validateField('description')"></textarea>
+                <small>{{(newRoom.description || '').length}}/500 characters</small>
+                <div *ngIf="errors.description" class="error">{{errors.description}}</div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button (click)="addRoom()" [disabled]="!isFormValid()">Add Room</button>
+            <button (click)="cancelAddRoom()">Cancel</button>
+        </div>
+    </div> -->
+
+    <!-- Bulk Add Form -->
+    <!-- <div *ngIf="showBulkAdd" class="bulk-add-form">
+        <h3>Bulk Add Rooms</h3>
+        <div class="bulk-options">
+            <div class="csv-section">
+                <h4>CSV Import</h4>
+                <p>Upload a CSV file with room details. <a href="#" (click)="downloadTemplate()">Download Template</a>
+                </p>
+                <input type="file" #fileInput accept=".csv" (change)="onFileSelected($event)">
+                <button (click)="uploadCSV()" [disabled]="!selectedFile">Upload CSV</button>
+            </div>
+        </div>
+        <button (click)="showBulkAdd = false">Close</button>
+    </div> -->
+
+    <!-- Success Message -->
+    <!-- <div *ngIf="successMessage" class="success-message">
+        <h4>{{successMessage}}</h4>
+        <div *ngIf="addedRoomDetails" class="room-details">
+            <p><strong>Room Number:</strong> {{addedRoomDetails.number}}</p>
+            <p><strong>Type:</strong> {{addedRoomDetails.type}}</p>
+            <p><strong>Price:</strong> \${{addedRoomDetails.price}}</p>
+            <p><strong>Max Occupancy:</strong> {{addedRoomDetails.maxOccupancy}}</p>
+        </div>
+        <div class="success-actions">
+            <button (click)="addAnotherRoom()">Add Another Room</button>
+            <button (click)="returnToDashboard()">Return to Dashboard</button>
+        </div>
+    </div> -->
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Room ID</th>
+                    <th>Room Number</th>
+                    <th>Type</th>
+                    <th>Price Per Night</th>
+                    <th>Status</th>
+                    <th>Number of Adults</th>
+                    <th>Number of Children</th>
+                    <th>Max Occupancy</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let room of paginatedRooms">
+                    <td>{{room.roomId}}</td>
+                    <td>{{room.roomNumber}}</td>
+                    <td>{{room.roomType}}</td>
+                    <td>₹{{room.pricePerNight}}</td>
+                    <td>
+                        <span [class]="'status-' + room.roomStatus?.toLowerCase()?.replace(' ', '-')">
+                            {{room.roomStatus}}
+                        </span>
+                    </td>
+                    <td>{{room.numberOfAdults}}</td>
+                    <td>{{room.numberOfChildren}}</td>
+                    <td>{{room.maxOccupancy}}</td>
+                    <td>{{room.description || 'N/A'}}</td>
+                    <td class="no-wrap">
+                        <button (click)="editRoom(room)" [disabled]="room.roomStatus === 'Occupied'">Edit</button>
+                        <button (click)="deleteRoom(room.roomId)"
+                            [disabled]="room.roomStatus === 'Occupied'">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination">
+        <button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+        <span>Page {{currentPage}} of {{totalPages}}</span>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+        <select [(ngModel)]="itemsPerPage" name="itemsPerPage" (change)="updatePagination()">
+            <option value="5">5 per page</option>
+            <option value="10">10 per page</option>
+            <option value="20">20 per page</option>
+        </select>
+    </div>
+
+    <!-- Edit Room Modal -->
+    <div class="modal fade" [class.show]="showEditModal" [style.display]="showEditModal ? 'block' : 'none'"
+        tabindex="-1" role="dialog" *ngIf="showEditModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content animate-slide-down">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-edit me-2"></i>
+                        Edit Room #{{ selectedRoom?.roomNumber }}
+                    </h5>
+                    <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+                </div>
+
+                <form [formGroup]="editForm" (ngSubmit)="submitEdit()">
+                    <div class="modal-body">
+                        <!-- Success Message -->
+                        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show"
+                            role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            {{ successMessage }}
+                        </div>
+
+                        <!-- Error Message -->
+                        <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            {{ errorMessage }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="roomNumber" class="form-label">Room Number</label>
+                                <input type="number" class="form-control" id="roomNumber" formControlName="roomNumber"
+                                    readonly>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="roomType" class="form-label">Room Type</label>
+                                <select class="form-select" id="roomType" formControlName="roomType">
+                                    <option value="">Select Room Type</option>
+                                    <option *ngFor="let type of roomTypes" [value]="type">{{ type | titlecase }}
+                                    </option>
+                                </select>
+                                <div *ngIf="editForm.get('roomType')?.invalid && editForm.get('roomType')?.touched"
+                                    class="text-danger small mt-1">
+                                    Room type is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="pricePerNight" class="form-label">Price Per Night</label>
+                                <input type="number" class="form-control" id="pricePerNight"
+                                    formControlName="pricePerNight" min="1">
+                                <div *ngIf="editForm.get('pricePerNight')?.invalid && editForm.get('pricePerNight')?.touched"
+                                    class="text-danger small mt-1">
+                                    Valid price is required
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="roomStatus" class="form-label">Room Status</label>
+                                <select class="form-select" id="roomStatus" formControlName="roomStatus">
+                                    <option value="Available">Available</option>
+                                    <option value="Occupied">Occupied</option>
+                                    <option value="Under Maintenance">Under Maintenance</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="numberOfAdults" class="form-label">Adults</label>
+                                <input type="number" class="form-control" id="numberOfAdults"
+                                    formControlName="numberOfAdults" min="1">
+                                <div *ngIf="editForm.get('numberOfAdults')?.invalid && editForm.get('numberOfAdults')?.touched"
+                                    class="text-danger small mt-1">
+                                    Valid number required
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="numberOfChildren" class="form-label">Children</label>
+                                <input type="number" class="form-control" id="numberOfChildren"
+                                    formControlName="numberOfChildren" min="0">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="maxOccupancy" class="form-label">Max Occupancy</label>
+                                <input type="number" class="form-control" id="maxOccupancy"
+                                    formControlName="maxOccupancy" min="1">
+                                <div *ngIf="editForm.get('maxOccupancy')?.invalid && editForm.get('maxOccupancy')?.touched"
+                                    class="text-danger small mt-1">
+                                    Valid occupancy required
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" rows="3" formControlName="description"
+                                placeholder="Room description..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeEditModal()"
+                            [disabled]="isSubmitting">Cancel</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || isSubmitting">
+                            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+                            {{ isSubmitting ? 'Updating...' : 'Update Room' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Backdrop -->
+    <div class="modal-backdrop fade" [class.show]="showEditModal" *ngIf="showEditModal" (click)="closeEditModal()">
+    </div>
+</div>

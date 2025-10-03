@@ -1,0 +1,59 @@
+.card {
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-bottom: none;
+}
+
+.form-control {
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.btn-success {
+  border-radius: 25px;
+  font-weight: 600;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+}
+
+.alert-light {
+  background-color: #f8f9fa;
+}
+
+.alert-info {
+  background-color: #e7f3ff;
+  border-color: #b3d7ff;
+  color: #0c5460;
+}
+
+.text-primary { color: #007bff !important; }
+.text-warning { color: #ffc107 !important; }
+.text-success { color: #28a745 !important; }
+
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+
+.fab {
+  opacity: 0.8;
+}
+
+.fab:hover {
+  opacity: 1;
+}
+
+input[type="text"], input[type="password"] {
+  font-family: 'Courier New', monospace;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}

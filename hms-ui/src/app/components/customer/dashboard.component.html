@@ -1,0 +1,112 @@
+<div class="container-fluid">
+  <!-- Welcome Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card dashboard-card">
+        <div class="card-body text-center">
+          <h1 class="display-4 mb-3">Welcome, {{ firstName }}!</h1>
+          <p class="lead">Discover amazing hotels and book your perfect stay</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="row mb-4">
+    <div class="col-md-3 mb-3">
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <i class="fas fa-search fa-3x text-primary mb-3"></i>
+          <h5 class="card-title">Search Rooms</h5>
+          <p class="card-text">Find available rooms for your dates</p>
+          <a routerLink="/user/search-rooms" class="btn btn-primary">Search Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <i class="fas fa-calendar-alt fa-3x text-success mb-3"></i>
+          <h5 class="card-title">My Bookings</h5>
+          <p class="card-text">View and manage your reservations</p>
+          <a routerLink="/user/my-bookings" class="btn btn-success">View Bookings</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+          <h5 class="card-title">Complaints</h5>
+          <p class="card-text">Register or track your complaints</p>
+          <a routerLink="/user/complaints" class="btn btn-warning">Manage Complaints</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <i class="fas fa-user fa-3x text-info mb-3"></i>
+          <h5 class="card-title">Profile</h5>
+          <p class="card-text">Update your personal information</p>
+          <a routerLink="/profile" class="btn btn-info">Edit Profile</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Bookings -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Recent Bookings</h5>
+          <a routerLink="/user/my-bookings" class="btn btn-sm btn-outline-primary">View All</a>
+        </div>
+        <div class="card-body">
+          <div *ngIf="loading" class="text-center py-4">
+            <div class="loading-spinner"></div>
+            <p class="mt-2">Loading bookings...</p>
+          </div>
+
+          <div *ngIf="!loading && recentBookings.length === 0" class="text-center py-4">
+            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No bookings found</h5>
+            <p class="text-muted">Start your journey by booking a room!</p>
+            <a routerLink="/user/search-rooms" class="btn btn-primary">Book Now</a>
+          </div>
+
+          <div *ngIf="!loading && recentBookings.length > 0" class="row">
+            <div class="col-md-4 mb-3" *ngFor="let booking of recentBookings">
+              <div class="card border-left-primary">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="card-title mb-0">Booking #{{ booking.bookingId }}</h6>
+                    <span class="badge" [ngClass]="{
+                            'bg-success': booking.bookingStatus === 'Confirmed',
+                            'bg-primary': booking.bookingStatus === 'Checked-in',
+                            'bg-secondary': booking.bookingStatus === 'Checked-out',
+                            'bg-danger': booking.bookingStatus === 'Cancelled'
+                          }">
+                      {{ booking.bookingStatus }}
+                    </span>
+                  </div>
+                  <p class="card-text">
+                    <small class="text-muted">
+                      Room {{ booking.roomNumber }} | {{ booking.roomType }}<br>
+                      {{ booking.checkInDate | date:'dd/MM/yyyy' }} - {{ booking.checkOutDate | date:'dd/MM/yyyy' }}<br>
+                      Total: ₹{{ booking.totalAmount | number:'1.2-2' }}
+                    </small>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

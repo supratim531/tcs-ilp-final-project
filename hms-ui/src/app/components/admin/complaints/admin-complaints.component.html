@@ -1,0 +1,180 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2>Complaint Management</h2>
+      <p class="text-muted">Manage and resolve customer complaints</p>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border"></div>
+    <p class="mt-2">Loading complaints...</p>
+  </div>
+
+  <!-- Search and Filter Controls -->
+  <div *ngIf="!loading" class="card mb-3">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label">Search</label>
+          <input type="text" class="form-control" placeholder="Search by customer name or ID" 
+                 [(ngModel)]="searchTerm" (input)="applyFilters()">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Category</label>
+          <select class="form-select" [(ngModel)]="filterCategory" (change)="applyFilters()">
+            <option value="">All Categories</option>
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Status</label>
+          <select class="form-select" [(ngModel)]="filterStatus" (change)="applyFilters()">
+            <option value="">All Statuses</option>
+            <option *ngFor="let status of complaintStatuses" [value]="status">{{ status }}</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">From Date</label>
+          <input type="date" class="form-control" [(ngModel)]="filterDateFrom" (change)="applyFilters()">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">To Date</label>
+          <input type="date" class="form-control" [(ngModel)]="filterDateTo" (change)="applyFilters()">
+        </div>
+        <div class="col-md-1 d-flex align-items-end">
+          <button type="button" class="btn btn-outline-secondary" (click)="clearFilters()">
+            <i class="fas fa-times"></i> Clear
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Complaints Table -->
+  <div *ngIf="!loading" class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Complaint ID</th>
+              <th>Customer</th>
+              <th>Category</th>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Assigned Staff</th>
+              <th>Submitted</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let complaint of filteredComplaints">
+              <td>#{{ complaint.complaintId }}</td>
+              <td>{{ complaint.customerName }}</td>
+              <td>{{ complaint.category }}</td>
+              <td>{{ complaint.title }}</td>
+              <td>
+                <span class="badge" [ngClass]="getStatusBadgeClass(complaint.complaintStatus)">
+                  {{ complaint.complaintStatus }}
+                </span>
+              </td>
+              <td>{{ complaint.assignedStaffId || 'Unassigned' }}</td>
+              <td>{{ complaint.submissionDate | date:'dd/MM/yyyy' }}</td>
+              <td>
+                <button class="btn btn-sm btn-primary" (click)="updateComplaint(complaint)">
+                  <i class="fas fa-edit me-1"></i>Update
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update Complaint Modal -->
+  <div class="modal fade" [class.show]="showUpdateModal" [style.display]="showUpdateModal ? 'block' : 'none'" 
+       tabindex="-1" role="dialog" *ngIf="showUpdateModal">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content animate-slide-down">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-edit me-2"></i>
+            Update Complaint #{{ selectedComplaint?.complaintId }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeUpdateModal()"></button>
+        </div>
+        
+        <form [formGroup]="updateForm" (ngSubmit)="submitUpdate()">
+          <div class="modal-body">
+            <!-- Success Message -->
+            <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+              <i class="fas fa-check-circle me-2"></i>
+              {{ successMessage }}
+            </div>
+            
+            <!-- Error Message -->
+            <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              {{ errorMessage }}
+            </div>
+
+            <!-- Complaint Details -->
+            <div class="mb-3">
+              <h6>Complaint Details</h6>
+              <div class="bg-light p-3 rounded">
+                <p><strong>Customer:</strong> {{ selectedComplaint?.customerName }}</p>
+                <p><strong>Category:</strong> {{ selectedComplaint?.category }}</p>
+                <p><strong>Title:</strong> {{ selectedComplaint?.title }}</p>
+                <p><strong>Description:</strong> {{ selectedComplaint?.description }}</p>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="complaintStatus" class="form-label">Status</label>
+                <select class="form-select" id="complaintStatus" formControlName="complaintStatus">
+                  <option value="">Select Status</option>
+                  <option *ngFor="let status of complaintStatuses" [value]="status">{{ status }}</option>
+                </select>
+                <div *ngIf="updateForm.get('complaintStatus')?.invalid && updateForm.get('complaintStatus')?.touched" 
+                     class="text-danger small mt-1">
+                  Status is required
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="assignedStaffId" class="form-label">Assign to Staff</label>
+                <input type="text" class="form-control" id="assignedStaffId" 
+                       formControlName="assignedStaffId" 
+                       placeholder="Enter staff ID or name">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="resolutionNotes" class="form-label">Resolution Notes</label>
+              <textarea class="form-control" id="resolutionNotes" rows="4" 
+                        formControlName="resolutionNotes" 
+                        placeholder="Add resolution notes or response..."></textarea>
+            </div>
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeUpdateModal()" 
+                    [disabled]="isSubmitting">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="updateForm.invalid || isSubmitting">
+              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+              {{ isSubmitting ? 'Updating...' : 'Update Complaint' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Backdrop -->
+  <div class="modal-backdrop fade" [class.show]="showUpdateModal" *ngIf="showUpdateModal" 
+       (click)="closeUpdateModal()"></div>
+</div>
